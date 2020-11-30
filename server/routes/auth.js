@@ -1,6 +1,7 @@
 const router=require('express').Router();
 const passport=require('passport');
 const UserServices = require('../models/user');
+const Channel=require('../models/channel');
 const config=require('../config/oauthStrategy');
 
 router.get('/google',passport.authenticate('google',{scope:['profile']}));
@@ -23,13 +24,23 @@ router.get('/facebook/redirect',passport.authenticate('facebook'),(req,res)=>{
 router.post('/register', function (req,res,next){
      UserServices.User.findOne({username:req.body.username}).then((user)=>{
          if(user){
-           return res.json({message:'username is already taken',loggedIn:false});
+           return res.json({message:'Username is already taken',loggedIn:false});
          }
          else{
-          new UserServices.User({
-            username:req.body.username,
-            password:req.body.password
-          }).save().then((newUser)=>{
+           UserServices.User.create({
+                username:req.body.username,
+                password:req.body.password
+           },function(err,newUser){
+            Channel.findById('5fc52db79aa9fb091c81c332',function(err,channel){
+              if(err){
+                res.send('error finding welcome channel')
+              }else{
+                newUser.channels.push(channel);
+                newUser.save();
+                channel.members.push(newUser);
+                channel.save();
+              }
+            })
             passport.authenticate('local', function(err, user, info) {
               if (err) { return next(err) }
               if (!user) {
@@ -58,13 +69,14 @@ router.post('/login', function(req, res, next) {
   })(req, res, next);
 });
 
+router.get('/status',(req,res)=>{
+    res.json(req.isAuthenticated());
+})
+
 router.get('/logout',(req,res)=>{
    req.logout();
    res.send(req.user);
 });
 
-router.get('/lg',(req,res)=>{
-  res.send(req.user);
-})
 
 module.exports=router;

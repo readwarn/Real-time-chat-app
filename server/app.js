@@ -1,15 +1,20 @@
 const express=require('express');
+const socket = require('socket.io');
 const bodyParser=require('body-parser');
 const passport=require('passport');
 const mongoose=require('mongoose');
 const auth=require('./routes/auth');
 const user=require('./routes/user');
+const channel=require('./routes/channels');
 var dot =require('dotenv');
 dot.config();
 const app=express();
 mongoose.connect(process.env.MONGODB_URI,{useNewUrlParser:true, useUnifiedTopology:true, useFindAndModify: false});
 mongoose.connection.on('connected', function(){
   console.log('connected');
+});
+mongoose.connection.on('error', function(){
+  console.log('error connecting to mongoDB');
 });
 app.use(bodyParser.json());
 app.set('trust proxy', 1)
@@ -26,7 +31,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
-  res.header('Access-Control-Allow-Origin', 'https://warm-scrubland-49028.herokuapp.com');
+  res.header('Access-Control-Allow-Origin', 'https://calm-meadow-71961.herokuapp.com');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
   next();
@@ -36,8 +41,30 @@ app.get('/',(req,res)=>{
   res.send('home');
 })
 app.use('/auth', auth);
-app.use('/user',user);
+app.use('/users',user);
+app.use('/channels',channel);
 
-app.listen(process.env.PORT || 3000,function(){
+const server = app.listen(process.env.PORT || 3000,function(){
   console.log("running");
+});
+
+const io = socket(server,{
+  cors: {
+    origin: "https://calm-meadow-71961.herokuapp.com",
+    methods: ["GET", "POST"]
+  }
+});
+
+io.on('connection', (socket) => {
+    socket.on('registerAll',channels=>{
+      channels.forEach(channel => {
+         socket.join(channel._id);
+      });
+    });
+    socket.on('register',channel=>{
+       socket.join(channel._id)
+    })
+    socket.on('messageSent',(channel)=>{
+       socket.to(channel._id).emit('messageReceived',channel)
+    })
 });

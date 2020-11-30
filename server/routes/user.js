@@ -1,20 +1,55 @@
 const router=require('express').Router();
 const Authenticator=require('../middleware/authware');
 const UserServices=require('../models/user');
-router.get('/',Authenticator.isLoggedIn,(req,res)=>{
-    res.json({
-      user:req.user,
-      isLoggedIn:true,
-      session:req.session
-    });
+const Channel=require('../models/channel');
+router.get('/',(req,res)=>{
+    UserServices.User.find({},function(err,users){
+      if(err){
+        res.send('error finding users')
+      }else{
+        res.send(users);
+      }
+    })
 });
 
-router.post('/',Authenticator.isLoggedIn,(req,res)=>{
+router.get('/currentUser',(req,res)=>{
+  res.send(req.user);
+})
+
+router.put('/currentUser',Authenticator.isLoggedIn,(req,res)=>{
    UserServices.User.findByIdAndUpdate(req.user._id,req.body).then((user)=>{
-       res.json({
-         isLoggedIn:true
-       })
+       res.json(user);
    })
 })
 
+router.get('/currentUser/channels',Authenticator.isLoggedIn,(req,res)=>{
+     UserServices.User.findById(req.user.id)
+     .populate({
+       path:'channels',
+       populate:[{
+         path:'members',
+         model:'User'
+       },{
+         path:'messages',
+         populate:{
+           path:'owner.id',
+           model:'User'
+         }
+       }]
+     })
+     .exec(function(err,user){
+         res.json(user.channels);
+     })
+});
+
+router.delete('/',(req,res)=>{
+  UserServices.User.deleteMany({},function(err){
+    if(err){
+      res.send('ooops')
+    }
+    else{
+      res.send('all users are gone viola');
+    }
+  })
+})
 module.exports=router;

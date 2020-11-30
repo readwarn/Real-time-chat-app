@@ -3,7 +3,6 @@ module.exports={
         if(!req.isAuthenticated()) {
             res.json({
                 isLoggedIn:false,
-                session:req.session
             });
         }
         else{
