@@ -14,5 +14,5 @@ This is a chat app that lets user join a channel and chat with the members.
   * Notifies users when a member leaves or join a channel
 
   ## Preview
-  ![chat a](https://github.com/client/src/assets/chat-a.png "preview a")
-  ![chat b](https://github.com/client/src/assets/chat-b.png "preview b")
+  ![chat a](https://github.com/readwarn/Authentication/blob/main/client/src/assets/chat-a.png "preview a")
+  ![chat b](https://github.com/readwarn/Authentication/blob/main/client/src/assets/chat-b.png "preview b")
