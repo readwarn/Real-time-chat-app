@@ -23,12 +23,10 @@ export default {
       outline: none;
       padding: 1rem 0.5rem;
       border-radius: 0.3rem;
-      border: 1.4px solid black;
-      background: rgb(241, 238, 238);
-      color: gray;
+      border: 1.4px solid var(--stroke);     
   }
   label{
-      color: gray;
+      color: var(--button-text);
       font-size: 0.8rem;
       text-transform: capitalize;
   }

@@ -1,14 +1,13 @@
-var express=require('express');
+const express=require('express');
 const Authenticator=require('../middleware/authware');
-const channel = require('../models/channel');
-var router=express.Router();
-var Channel=require('../models/channel');
-var Message=require('../models/message');
+const router=express.Router();
+const Channel=require('../models/channel');
+const Message=require('../models/message');
 
 router.get('/',(req,res)=>{
     Channel.find({},function(err,channels){
         if(err){
-            res.send('error finding channels')
+            res.send('error finding Channels')
         }else{
             res.json(channels)
         }
@@ -62,27 +61,36 @@ router.put('/welcome/edit',(req,res)=>{
 })
 
 router.post('/',Authenticator.isLoggedIn,(req,res)=>{
-    Channel.findOne({name:req.body.name}).then(fc=>{
-        if(fc){
-           res.json({nameTaken:true})
-        }
-        else{
-            Channel.create(req.body)
-            .populate('members')
-            .populate('messages')
-            .exec(function(err,channel){
-                if(err){
-                    res.send('error creating new channel')
-                }else{
-                    channel.members.push(req.user);
-                    channel.save();
-                    req.user.channels.push(channel);
-                    req.user.save();
-                    res.json(channel);
-                }
-            })
-        }
-    })
+    Channel.findOne({'name':req.body.name},function(err,fc){
+            if(err){
+                 res.send('error');
+            }
+            if(fc){
+                 res.json({nameTaken:true});
+            }
+            else{
+                 Channel.create(req.body,function(err,channel){
+                     if(err){
+                         res.send('ooops');
+                     }else{
+                         Channel.findById(channel._id)
+                        .populate('members')
+                        .populate('messages')
+                        .exec(function(err,foundChannel){
+                            if(err){
+                                res.send('error creating new channel');
+                            }else{
+                                foundChannel.members.push(req.user);
+                                foundChannel.save();
+                                req.user.channels.push(foundChannel);
+                                req.user.save();
+                            }
+                            res.json(foundChannel);
+                        })
+                     }
+                 })
+            }
+      })
 })
 router.delete('/:id',Authenticator.isLoggedIn,(req,res)=>{
     Channel.findById(req.params.id).then(foundChannel=>{

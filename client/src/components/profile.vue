@@ -1,15 +1,17 @@
 <template>
    <div class="profile" :class="{'display':display}">
-       <router-link to="/">
+       <router-link to="/dashboard">
         <div>
          <i class="fa fa-user"></i>
          <p>My profile</p>
        </div>
        </router-link>
-       <div>
-          <i class="fa fa-users"></i>
-          <p>Group Chat</p>
+        <router-link :to="{name: 'channel', params: { id: '5fc52db79aa9fb091c81c332' }}">
+        <div>
+         <i class="fa fa-users"></i>
+         <p>Channels</p>
        </div>
+       </router-link>
        <div class="logout" @click="logout">
           <i class="fa fa-sign-out-alt"></i>
           <p>Logout</p>
@@ -24,7 +26,7 @@ export default {
     props:['display'],
     methods:{
         logout(){
-            this.$http.get('https://rocky-temple-08906.herokuapp.com/auth/logout').then((response)=>{
+            this.$http.get('https://whispering-everglades-42925.herokuapp.com/auth/logout').then((response)=>{
                 console.log(response);
                 router.push('/login');
             })
@@ -33,21 +35,20 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
    div.profile{
        font-size: 0.75rem;
-       border: 1.35px solid #E0E0E0;
        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
        border-radius: 0.3rem;
        padding: 0.4rem;
        width: 150px;
-       background: #07031a;
-       opacity: 0;
-       transition: all ease-in-out 0.3s;
+       background:var(--stroke);
        z-index: 99;
+       display: none;
+       color: var(--button-text);
    }
    div.display.profile{
-       opacity: 1;
+       display: block;
    }
    div.profile div{
        display: flex;
@@ -66,11 +67,11 @@ export default {
     }
     div.profile a{
         text-decoration: none;
-        color: white;
+        color: var(--button-text);
     }
    
    div.profile div.logout{
-        color: #EB5757;
+        color: var(--error);
         border-top: 1px solid #E0E0E0;
         margin-top: 0.6rem;
         margin-bottom: 4px;

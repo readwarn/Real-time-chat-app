@@ -1,40 +1,45 @@
 <template>
-   <div class="form-cont">
-           <div class="form">
-       <div class="head">
-            <i class="fab fa-airbnb"></i><p>DevChallenges</p>
-        </div>
-        <p class="title">Login</p>
-         <div class="input-field">
-            <i class="fa fa-envelope"></i>
-            <input type="text" placeholder="Username" v-model="user.username">
-         </div>
-         <div class="input-field">
-            <i class="fa fa-lock"></i>
-            <input :type="password" placeholder="Password" v-model="user.password">
-            <i class="fa fa-eye eye" :class="{'fa-eye-slash':eye}"  @click="togglePasswordField"></i>
-         </div>
-         <p class="error">{{error}}</p>
-         <button @click="login">Start coding now</button>
-         <p class="option">or continue with these social profile</p>
-         <div class="social-icons">
-            <a href="https://rocky-temple-08906.herokuapp.com/auth/google" target="_self"><i class="fab fa-google"></i></a>
-            <a href="https://rocky-temple-08906.herokuapp.com/auth/facebook" target="_self"><i class="fab fa-facebook-square"></i></a>
-            <a href="#" target="_self"><i class="fab fa-twitter"></i></a>
-            <a href="https://rocky-temple-08906.herokuapp.com/auth/github" target="_self"><i class="fab fa-github"></i></a>
-         </div>
-         <p class="option">Dont have an account? <router-link to="/register">Register</router-link>  </p>
-   </div>
-   <div class="rilwan">
-        <p>Rilwan</p>
-        <p>devchallenges.io</p>
-   </div>
+   <div class="main" :style="{backgroundImage:bg2}">
+           <div class="brand">
+                <img src="//s.svgbox.net/social.svg?fill=6246ea#gumroad">
+                <p>Circuit</p>
+           </div>
+           <div class="form-container">
+                <div class="welcome">
+                    <h3>Welcome back,</h3>
+                    <h4>Sign in to continue</h4>
+                </div>
+                <div class="form" :style="{backgroundImage:bg1}">
+                    <div class="input-field" :class="{'focus':focusUser}">
+                        <i class="fa fa-envelope"></i>
+                        <input type="text" placeholder="Username" @keyup.enter="login" v-model="user.username" @focus="focus('user')">
+                    </div>
+                    <div class="input-field" :class="{'focus':focusPassword}">
+                        <i class="fa fa-lock"></i>
+                        <input :type="password" placeholder="Password" @keyup.enter="login" v-model="user.password" @focus="focus('password')">
+                        <i class="fa fa-eye eye" :class="{'fa-eye-slash':eye}"  @click="togglePasswordField"></i>
+                    </div>
+                    <p class="error">{{error}}</p>
+                    <div class="sign-in">
+                        <p class="option">Dont have an account? <router-link to="/register">Register</router-link></p>
+                        <button @click="login" :disabled="disabled"><span v-if="!disabled">Sign In</span><img src="//s.svgbox.net/loaders.svg?fill=ffffff#oval" v-if="disabled"></button>
+                    </div>
+                    <p class="option">Or continue with these social profile</p>
+                    <div class="social-icons">
+                        <a href="https://whispering-everglades-42925.herokuapp.com/auth/google" target="_self"><i class="fab fa-google"></i></a>
+                        <a href="https://whispering-everglades-42925.herokuapp.com/auth/facebook" target="_self"><i class="fab fa-facebook-square"></i></a>
+                        <a href="#" target="_self"><i class="fab fa-twitter"></i></a>
+                        <a href="https://whispering-everglades-42925.herokuapp.com/auth/github" target="_self"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+          </div>
    </div>
 </template>
 
 <script>
-
-import router from '../router'
+import router from '../router';
+import bg1 from '@/assets/guide-back.png';
+import bg2 from '@/assets/offer-bg.png'
 /* eslint-disable */
 export default {
     data(){
@@ -45,19 +50,24 @@ export default {
            },
            error:'',
            password:'password',
-           eye:false
+           eye:false,
+           disabled:false,
+           focusUser:false,
+           focusPassword:false,
+           bg1:`url(${bg1})`,
+           bg2:`url(${bg2})`,
        }
     },
     methods:{
         login(){
+            this.disabled=true;
             const self=this;
-            this.$http.post('https://rocky-temple-08906.herokuapp.com/auth/login',self.user).then((response)=>{
+            this.$http.post('https://whispering-everglades-42925.herokuapp.com/auth/login',self.user).then((response)=>{
+                    this.disabled=false;
                   if(!response.data.loggedIn){ 
                      self.error=response.data.message;
-                     console.log('logged in: ',response) 
-                  }else{
-                     console.log('logged out: ',response) 
-                     router.push('/');
+                  }else{ 
+                     router.push('/channels/5fc52db79aa9fb091c81c332');
                   }
             })
         },
@@ -68,84 +78,110 @@ export default {
             }else{
                 this.password='password'
             }
+        },
+         focus(element){
+            if(element==='user'){
+                 this.focusUser=true;
+                 this.focusPassword=false;
+            }else{
+                 this.focusUser=false;
+                 this.focusPassword=true;
+            }
         }
     }
 }
 </script>
 
 <style scoped>
-   div.form-cont{
+    div.main{
+        background: var(--background);
+        padding: 2rem;
+        color: var(--text);
+        background-size: 30% 60%;
+        background-repeat: no-repeat;
+        background-position:-0% -45%;
+    }
+    div.brand{
+         display: flex;
+         align-items: center;
+         color: var(--button);
+         margin-bottom: 3rem;
+    }
+    div.brand img{
+         width: 30px;
+         height: 30px;
+    }
+    div.brand p{
+        margin: 0;
+        margin-left: 0.4rem;
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+    div.welcome h3{
+         font-size: 2.5rem;
+         margin-bottom: 0.3rem;
+    }
+    div.welcome h4{
+         font-size: 2rem;
+         margin: 0;
+         filter: brightness(2.5);
+    }
+    div.form-container{
        display: flex;
-       flex-direction: column;
-       justify-content: center;
-       align-items: center;
-       min-height: 100vh;
-       background: #050505;
-       color: white;
-       padding: 20px 0;
+       justify-content: space-between;
+       flex-wrap: wrap;
    }
-   div.form p.title{
-       font-weight: 700;
-       font-size: 1.4rem;
-   }
-   div.form{
+   div.form{  
     padding: 2rem;
-    border-radius: 20px;
-    width: 32%;
-    border: 1.5px solid rgb(5, 5, 5);
-    background: #2a2158;
-    box-sizing: border-box;
-}
-div.head{
-    display: flex;
-    align-items: center;
-}
-div.head p{
-    color: white;
-    margin: 0;
-    font-size: 0.8rem;
-}
-div.head i{
-    margin-right: 0.1rem;
-    color: #C73622;
-    font-size: 1.2rem;
-}
-div.rilwan{
-    font-size: 0.7rem;
-    display: flex;
-    width: 22%;
-    justify-content: space-between;
-    padding: 0rem 1.5rem;
-}
-p.option{
-    font-size: 0.85rem;
-    color: gray;
-    text-align: center;
-}
-p.option a{
-    text-decoration: none;
-    color: tomato;
-}
-div.input-field{
-    border: 1.7px solid black;
+    border-radius: 0.35rem;
+    border: 1.7px solid var(--stroke);
+  }
+  div.input-field{
+    border: 1.7px solid var(--stroke);
     border-radius: 0.4rem;
     width: 100%;
-    height: 45px;
+    height: 55px;
     display: flex;
     align-items: center;
     margin-bottom: 2rem;
-    background: rgb(241, 238, 238);
+}
+div.input-field.focus{
+     border-color: var(--button);
 }
 div.input-field input{
     width: 90%;
-    height: 95%;
+    height: 100%;
     outline: none;
     border: none;
     background: transparent;
 }
 div.input-field i{
     margin: 0rem 1rem;
-    color: rgb(71, 67, 67);
+    color: var(--button);
+}
+div.sign-in{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+}
+div.sign-in button{
+    color: var(--button-text);
+    background: var(--button);
+    border: none;
+    outline: none;
+    width: 100px;
+    padding: 0.7rem;
+    border-radius: 0.35rem;
+    cursor: pointer;
+}
+div.sign-in button img{
+    width: 16px;
+    height: 16px;
+}
+p.option{
+    font-size: 0.8rem;
+    text-align: center;
 }
 div.social-icons{
     display: flex;
@@ -154,7 +190,7 @@ div.social-icons{
     margin-top:1rem;
 }
 div.social-icons i{
-    border: 1.2px solid white;
+    border: 1.2px solid var(--stroke);
     border-radius: 100%;
     padding: 0.5rem;
     cursor: pointer;
@@ -176,48 +212,78 @@ div.social-icons a:nth-child(3){
 }
 div.social-icons a:nth-child(4){
     text-decoration: none;
-    color: rgb(15, 0, 0);
+    color: var(--text);
 }
 div.input-field i.eye{
     cursor: pointer;
 }
-button{
-    background: #2F80ED;
-    border: none;
-    color: white;
-    border-radius: 0.4rem;
-    padding: 0.8rem;
-    width: 100%;
-    text-align: center;
-    cursor: pointer;
-}
-button:hover{
-    color: #2F80ED;
-    background: white;
-}
 p.error{
-    color: #F0402C;
+    color: var(--error);
     font-size: 0.7rem;
+    text-align: center;
+}
+a{
+    text-decoration: none;
+    color: var(--button);
 }
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 720px) {
-      div.form, div.rilwan{
-         width: 90%;
+    div.main{
+        padding: 1rem;
+        background-size: 57% 53%;
+        background-repeat: no-repeat;
+        background-position:-0% -45%;
+    }
+      div.form{
+         width: 100%;
+         padding: 0.8rem;
       } 
+      div.sign-in button{
+          width: 80px;
+      }
+      div.welcome h3{
+         font-size: 2rem;
+     }
+    div.welcome h4{
+         font-size: 1.5rem;
+         margin-bottom: 3rem;
+    }
+    div.brand{
+        margin-bottom: 1.5rem;
+    }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 720px) {
-      div.form,div.rilwan{
-           width: 65%;
-      }
+       div.main{
+        padding: 2rem;
+    }
+      div.form{
+         width: 100%;
+      } 
+      div.welcome h3{
+         font-size: 2rem;
+     }
+    div.welcome h4{
+         font-size: 1.5rem;
+         margin-bottom: 3rem;
+    }
+    div.brand{
+        margin-bottom: 1.5rem;
+    }
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 1000px) {
-       div.form,div.rilwan{
-          width: 40%;
+       div.form{
+          width: 50%;
        }
+         div.welcome h3{
+         font-size: 2.5rem;
+     }
+    div.welcome h4{
+         font-size: 2rem;
+    }
 }
 </style>

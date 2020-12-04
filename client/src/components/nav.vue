@@ -1,39 +1,48 @@
 <template>
-   <div class="nav">
-         <router-link to="/">
+   <nav>
+         <router-link to="/dashboard">
               <div class="brand">
-                    <i class="fab fa-airbnb"></i>
-                    <p class="brand">devChallenges</p>
+                    <img src="//s.svgbox.net/social.svg?fill=6246ea#gumroad">
+                    <p class="brand">Circuit</p>
               </div>
          </router-link>
          <div class="avatar">
-             <img :src="avatar" alt="avatar">
-             <p>{{username}}</p>
-             <i class="fa fa-caret-right" @click.stop="rotateCaret" :class="{'rotate':rotate}"></i>
+             <img :src="avi" alt="avi">
+             <p>{{user.username}}</p>
+             <i class="fa fa-chevron-right" @click.stop="rotateCaret" :class="{'rotate':rotate}"></i>
          </div>
-   </div>
+   </nav>
 </template>
 
 <script>
 import avatar1 from '@/assets/rilwan.jpg'
 /* eslint-disable */
 export default {
-     props:['username','rotate'],
+     props:['user','rotate'],
      data(){
          return{
             avatar:avatar1
          }
      },
+     computed:{
+         avi(){
+            if(this.user.avi===undefined){
+                return this.avatar;
+            }else{
+                return this.user.avi;
+            }
+        }
+     },
      methods:{
          rotateCaret(){
              this.$emit('clicke');
-         }
+         },
      }
 }
 </script>
 
 <style scoped>
-   div.nav{
+   nav{
        display: flex;
        justify-content: space-between;
        align-items: center;
@@ -43,25 +52,26 @@ export default {
        left: 0;
        width: 100%;
        box-sizing: border-box;
-       padding: 0.5rem 1.3rem;
-       background: #050505;
+       padding: 0rem 1.3rem;
+       background: var(--stroke);
        z-index: 90;
+       color: var(--button-text);
    }
    div.brand{
        display: flex;
        align-items: center;
        cursor: pointer;
    }
-   div.brand i{
-       color: coral;
-       font-size: 1.1rem;
+   div.brand img{
+       width: 30px;
+       height: 30px;
        cursor: pointer;
-       margin-right: 0.1rem;
+       margin-right: 0.4rem;
    }
    p.brand{
-       color: white;
-       font-size: 0.8rem;
+       font-size: 1rem;
        cursor: pointer;
+       color: var(--button-text);
    }
    div.avatar{
        display: flex;
@@ -73,9 +83,10 @@ export default {
        cursor: pointer;
    }
    div.avatar i{
-      font-size: 1.3rem;
+      font-size: 1rem;
       cursor: pointer;
       transition: all ease-in-out 0.3s;
+      color: var(--button-text);
    }
    div.avatar i.rotate{
        transform: rotate(90deg);
@@ -89,4 +100,10 @@ export default {
    a{
        text-decoration: none;
    }
+
+   @media only screen and (max-width: 720px) {
+      nav{
+           padding:0rem 0.5rem;
+      }
+}
 </style>

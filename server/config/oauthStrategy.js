@@ -18,7 +18,7 @@ passport.deserializeUser((id, done) => {
 passport.use(new GoogleStrategy({
     clientID: '766284901009-addbg5mgubtrnv5doie939saihjsr530.apps.googleusercontent.com',
     clientSecret: 'LhNiJw8ZqbyWw64-Fzkdyt1i',
-    callbackURL: 'https://rocky-temple-08906.herokuapp.com/auth/google/redirect'
+    callbackURL: 'https://whispering-everglades-42925.herokuapp.com/auth/google/redirect'
   },
    function (accessToken, refreshToken, profile, done){
     UserServices.findOrCreate(UserServices.User,done,profile);
@@ -28,7 +28,7 @@ passport.use(new GoogleStrategy({
 passport.use(new GitHubStrategy({
     clientID: '0ff9f174008c98f84fc6',
     clientSecret: '3a059e3bd45cc324f11f0555de0a874bcfdb45e3',
-    callbackURL: 'https://rocky-temple-08906.herokuapp.com/auth/github/redirect'
+    callbackURL: 'https://whispering-everglades-42925.herokuapp.com/auth/github/redirect'
   },
   function(accessToken, refreshToken, profile, done) {
     UserServices.findOrCreate(UserServices.User,done,profile);
@@ -38,7 +38,7 @@ passport.use(new GitHubStrategy({
 passport.use(new FacebookStrategy({
   clientID: '2599125657002783',
   clientSecret: 'bb2ff8ece7f15a10f5d1cedce0d20e20',
-  callbackURL: "https://rocky-temple-08906.herokuapp.com/auth/facebook/redirect"
+  callbackURL: "https://whispering-everglades-42925.herokuapp.com/auth/facebook/redirect"
 },
 function(accessToken, refreshToken, profile, done) {
      UserServices.findOrCreate(UserServices.User,done,profile);

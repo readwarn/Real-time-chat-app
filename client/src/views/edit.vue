@@ -1,16 +1,16 @@
 <template>
      <div class="edit-cont" @click="display=false">
-             <navbar @clicke="display=!display" :username="user.username" :rotate="display" />
+             <navbar @clicke="display=!display" :user="user" :rotate="display" />
              <div class="profile-container">
                  <profile :display='display' />
              </div>
-             <div class="back"><router-link to="/"><i class="fa fa-chevron-left"> back</i></router-link></div>
+             <div class="back"><router-link to="/dashboard"><i class="fa fa-chevron-left"> back</i></router-link></div>
              <div class="edit-form">
                  <p class="title">Change Info</p>
                  <p class="subtitle">Changes will be reflected to every services</p>
                  <div class="photo">
-                     <label :style="{backgroundImage:bg}">
-                        <input type="file" name="avatar" id="avatar" style="display:none; cursor:pointer;"/>
+                     <label :style="{backgroundImage:avi}">
+                        <input @change="uploadAvi" type="file" name="avatar" id="avatar" style="display:none; cursor:pointer;"/>
                         <i class="fa fa-camera"></i>
                      </label>
                      <p>{{photo}}</p>
@@ -30,42 +30,69 @@
 import profile from "@/components/profile.vue";
 import nav from "@/components/nav.vue";
 import inputField from "@/components/inputfield.vue";
-import avatar from '@/assets/rilwan.jpg'
+import avatar1 from '@/assets/rilwan.jpg'
 import router from '../router'
 export default {
    data(){
         return{
-            bg:`url(${avatar})`,
+            avatar:avatar1,
             display:false,
             photo:'CHANGE PHOTO',
+            CLOUDINARY_URL:'https://api.cloudinary.com/v1_1/dmigpnpar/image/upload',
+            CLOUDINARY_UPLOAD_PRESET:'qv83yxtp',
             user:{
                 username:'',
                 bio:'',
                 phone:'',
                 email:'',
-                password:''
+                password:'',
+                avi:''
             }
         }
     }, 
-     methods:{
+    computed:{
+        avi(){
+            if(this.user.avi===undefined){
+                return `url(${this.avatar})`
+            }else{
+                return `url(${this.user.avi})`
+            }
+        }
+    },
+    methods:{
       save(){
           const self=this;
-          this.$http.post('https://rocky-temple-08906.herokuapp.com/user',self.user).then((response)=>{
-             router.push('/');
+          this.$http.put('https://whispering-everglades-42925.herokuapp.com/users/currentUser',self.user).then(res=>{
+               router.push('/dashboard');
           })
+      },
+      uploadAvi(e){
+            const image = e.target.files[0];
+            if(image.size<100000){
+                this.photo='CHANGE PHOTO';
+                const formData = new FormData();
+                formData.append('file', image);
+                formData.append('upload_preset', this.CLOUDINARY_UPLOAD_PRESET);
+                fetch(this.CLOUDINARY_URL, {
+                method: 'POST',
+                body: formData,
+                })
+                .then(response => response.json())
+                .then((data) => {
+                 this.user.avi=data.secure_url;
+                 console.log(data);
+                })
+                .catch(err => console.error(err));
+            }else{
+                this.photo='File too big';
+            }
       }
    },
    created(){
-           const self=this;
-           this.$http.get('https://rocky-temple-08906.herokuapp.com/user').then((response)=>{
-            if(!response.data.isLoggedIn){
-                console.log(response);
-                router.push('/login');
-            }else{
-                 console.log(response.data.user)
-                 self.user=response.data.user;
-            }
-        });
+           this.$http.get('https://whispering-everglades-42925.herokuapp.com/users/currentUser').then(res=>{
+                  this.user=res.data;
+                  console.log(this.user.avi);
+           });
     },
    components:{
        'profile':profile,
@@ -78,17 +105,18 @@ export default {
 <style scoped>
  div.edit-cont{
       padding: 75px 0;
-      background: #050505;
+      background: var(--background);
       min-height: 100vh;
-      color: white;
+      color: var(--text);
  }
  div.edit-form{
-     border: 1.5px solid #BDBDBD;
+     border: 1.5px solid var(--stroke);
      width: 55%;
      margin: auto;
      border-radius: 0.4rem;
      padding: 1rem 2rem;
-     background: #2a2158;
+     background: var(--highlight);
+     color: var(--button-text);
  }
  div.back{
      width: 55%;
@@ -99,13 +127,13 @@ export default {
  }
  div.back i{
     cursor: pointer;
-    color: white;
  }
  div.back a{
+     color: var(--stroke);
      z-index: 50;
  }
  div.back i:hover{
-     color:#826ee7;
+     color:var(--button);
  }
  div.back i{
      margin-right: 0.4rem;
@@ -114,7 +142,6 @@ export default {
      display: flex;
      align-items: center;
      margin: 1.5rem 0rem;
-     color: gray;
      font-size: 0.9rem;
  }
  p.title{
@@ -122,7 +149,6 @@ export default {
     margin: 0;
  }
  p.subtitle{
-     color: gray;
      font-size: 0.7rem;
      margin: 0.3rem 0rem;
  }
@@ -134,18 +160,16 @@ export default {
      align-items: center;
      justify-content: center;
      border-radius: 0.3rem;
-     background-size:contain;
-     background-position: center;
-     color: white;
+     background-size:100% 100%;
      font-size: 1.1rem;
  }
  button.save{
      text-align: center;
-     color: white;
-     background: #07031a;
+     color: var(--button-text);
+     background: var(--sec-bg);
      border: none;
      width: 65px;
-     padding: 0.4rem 0rem;
+     padding: 0.6rem 0rem;
      border-radius: 0.3rem;
      cursor: pointer;
  }
@@ -167,10 +191,16 @@ export default {
        div.edit-form,div.back{
             width: 95%;
        }
+       div.edit-form{
+           padding: 1rem;
+       }
 }
 @media only screen and (min-width: 720px) {
        div.edit-form,div.back{
             width: 75%;
+       }
+        div.edit-form{
+           padding: 1.5rem;
        }
 }
 @media only screen and (min-width: 1000px) {

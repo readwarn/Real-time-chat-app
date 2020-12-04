@@ -12,8 +12,8 @@ router.get('/',(req,res)=>{
     })
 });
 
-router.get('/currentUser',(req,res)=>{
-  res.send(req.user);
+router.get('/currentUser',Authenticator.isLoggedIn,(req,res)=>{
+  res.json(req.user);
 })
 
 router.put('/currentUser',Authenticator.isLoggedIn,(req,res)=>{
@@ -23,7 +23,7 @@ router.put('/currentUser',Authenticator.isLoggedIn,(req,res)=>{
 })
 
 router.get('/currentUser/channels',Authenticator.isLoggedIn,(req,res)=>{
-     UserServices.User.findById(req.user.id)
+     UserServices.User.findById(req.user._id)
      .populate({
        path:'channels',
        populate:[{

@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import dashboard from "../views/dashboard.vue";
+import home from "../views/home.vue"
 
 
 Vue.use(VueRouter);
@@ -8,8 +8,17 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
+    name: "home",
+    component: home
+  },
+  {
+    path: "/dashboard",
     name: "dashboard",
-    component: dashboard
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/dashboard.vue")
   },
   {
     path: "/edit",
@@ -37,6 +46,15 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/register.vue")
+  },
+  {
+    path: "/channels/:id",
+    name: "channel",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/channel.vue")
   }
 ];
 

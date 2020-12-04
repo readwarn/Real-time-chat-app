@@ -1,11 +1,11 @@
 <template>
     <div class="dashboard" @click="display=false">
-         <navbar @clicke="display=!display" :username="user.username" :rotate="display" />
+         <navbar @clicke="display=!display" :user="user" :rotate="display" />
          <div class="profile-container">
               <profile :display='display' />
          </div>
          <div class="heading">
-             <h3>Personal Profile...</h3>
+             <h3>Personal Profile</h3>
              <p>Basic info, like your name and photo</p>
          </div>
          <div class="profile-cont">
@@ -18,7 +18,7 @@
            </div>
          <div class="row mb">
              <p class="key">PHOTO</p>
-             <img :src="avatar" alt="id">
+             <img :src="avi" alt="id">
          </div>
           <div class="row mb">
              <p class="key">NAME</p>
@@ -43,7 +43,6 @@
 <script>
 import nav from "@/components/nav.vue";
 import profile from "@/components/profile.vue";
-import router from '../router'
 import avatar from '@/assets/rilwan.jpg'
 /* eslint-disable */
 export default {
@@ -55,26 +54,24 @@ export default {
                 username:'',
                 bio:'',
                 phone:'',
-                email:''
+                email:'',
+                avi:''
             }
         }
     },
     created(){
-        const self=this;
-        if(this.user.username===''){
-             this.$http.get('https://rocky-temple-08906.herokuapp.com/user').then((response)=>{
-            if(!response.data.isLoggedIn){
-                console.log('dashboard ',response); 
-                router.push('/login');
-            }else{
-                 console.log('dashbord ',response) 
-                 self.user=response.data.user;
-            }
-        })
-        }
+          this.$http.get('https://whispering-everglades-42925.herokuapp.com/users/currentUser').then(res=>{
+              this.user=res.data;
+          })
     },
-    methods:{
-    
+    computed:{
+       avi(){
+           if(this.user.avi===undefined){
+               return this.avatar;
+           }else{
+               return this.user.avi;
+           }
+       }
     },
     components:{
         'navbar':nav,
@@ -90,27 +87,28 @@ div.dashboard p,h3{
 div.dashboard{
     padding: 75px 0;
     position: relative;
-    background: #050505;
+    background: var(--background);
     min-height: 100vh;
-    color: white;
+    color:var(--text);
 }
 div.heading{
     text-align: center;
     margin: 1.5rem 0rem;
 }
 div.heading h3{
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 700;
 }
 div.heading p{
     font-size: 0.85rem;
-    color: gray;
 }
 div.profile-cont{
-    border: 1.5px solid white;
+    border: 1.5px solid var(--stroke);
     border-radius: 0.4rem;
     width: 55%;
-    background: #2a2158;
+    background: var(--highlight);
     margin: auto;
+    color: var(--button-text);
 }
 
 div.profile-head{
@@ -121,23 +119,21 @@ div.profile-head{
 }
 p.option{
     font-size: 0.75rem;
-    color: gray;
 }
 p.title{
     font-weight: 700;
 }
 button.edit{
     outline: none;
-    border: 1.5px solid black;
+    border: 1.5px solid var(--stroke);
     border-radius: 10px;
-    color: black;
     cursor: pointer;
     box-sizing: border-box;
     padding: 0.4rem 0.8rem;
 }
 button.edit:hover{
-    background:#282051;
-    color: white;
+    background:var(--highlight);
+    color: var(--button-text);
 }
 div.row{
     display: flex;
@@ -152,7 +148,6 @@ div.row img{
 }
 div.row p:nth-child(1){
     width: 35%;
-    color: gray;
     font-size: 0.78rem;
 }
 div.row p:nth-child(2){
@@ -160,10 +155,10 @@ div.row p:nth-child(2){
     max-width: 65%;
 }
 .mb{
-    border-bottom: 1.3px solid #BDBDBD;
+    border-bottom: 1.3px solid var(--button-text);
 }
 div.profile-container{
-    position: fixed;
+     position: fixed;
      padding: 0rem 0.3rem;
      left: 0;
      width: 100%;
