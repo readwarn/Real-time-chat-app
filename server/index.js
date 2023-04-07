@@ -68,7 +68,7 @@ const io = socket(server, {
 });
 
 const redis = require("redis");
-const redisAdapter = require("socket.io-redis");
+const { createAdapter } = require("@socket.io/redis-adapter");
 const pubClient = redis.createClient(
   9809,
   "ec2-54-243-181-172.compute-1.amazonaws.com",
@@ -78,7 +78,7 @@ const pubClient = redis.createClient(
   }
 );
 const subClient = pubClient.duplicate();
-io.adapter(redisAdapter({ pubClient, subClient }));
+io.adapter(createAdapter(pubClient, subClient));
 
 io.on("connection", (socket) => {
   socket.on("registerAll", (channels) => {
