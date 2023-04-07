@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   useFindAndModify: false,
 });
 mongoose.connection.on("connected", function () {
-  console.log("connected");
+  console.log("connected!!!");
 });
 mongoose.connection.on("error", function () {
   console.log("error connecting to mongoDB");

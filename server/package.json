@@ -1,12 +1,12 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "my first mevn app",
-  "main": "app.js",
+  "description": "My first mevn app",
+  "main": "index.js",
   "scripts": {
-    "test": "node app.js",
-    "dev": "nodemon app.js",
-    "start": "node app.js"
+    "test": "node index.js",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "author": "Rilwan",
   "license": "ISC",
