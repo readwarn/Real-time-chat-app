@@ -67,11 +67,18 @@ const io = socket(server, {
   },
 });
 
-// const redis = require('redis');
-// const redisAdapter = require('socket.io-redis');
-// const pubClient = redis.createClient(9809, "ec2-54-243-181-172.compute-1.amazonaws.com", { auth_pass: "p724cd67583f041245abe3090c6d995154d884cb21d496d0fa9d6b6e324af9325" });
-// const subClient = pubClient.duplicate();
-// io.adapter(redisAdapter({ pubClient, subClient }));
+const redis = require("redis");
+const redisAdapter = require("socket.io-redis");
+const pubClient = redis.createClient(
+  9809,
+  "ec2-54-243-181-172.compute-1.amazonaws.com",
+  {
+    auth_pass:
+      "p724cd67583f041245abe3090c6d995154d884cb21d496d0fa9d6b6e324af9325",
+  }
+);
+const subClient = pubClient.duplicate();
+io.adapter(redisAdapter({ pubClient, subClient }));
 
 io.on("connection", (socket) => {
   socket.on("registerAll", (channels) => {
