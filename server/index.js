@@ -78,7 +78,7 @@ const pubClient = redis.createClient(
   }
 );
 const subClient = pubClient.duplicate();
-io.adapter(createAdapter(pubClient, subClient));
+// io.adapter(createAdapter(pubClient, subClient));
 
 io.on("connection", (socket) => {
   socket.on("registerAll", (channels) => {
