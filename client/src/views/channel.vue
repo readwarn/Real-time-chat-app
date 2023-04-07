@@ -202,7 +202,7 @@ import channels from "@/components/channels.vue";
 import profile from "@/components/profile.vue";
 import avatar1 from "@/assets/rilwan.jpg";
 import router from "../router";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 import dayjs from "dayjs";
 /* eslint-disable */
 export default {
@@ -257,9 +257,7 @@ export default {
       joining: false,
       joined: false,
       finding: false,
-      socket: io("https://real-time-chat-app-2jwk.vercel.app", {
-        transports: ["websocket"],
-      }),
+      socket: io("https://real-time-chat-app-2jwk.vercel.app"),
       child: 100,
       parent: 30,
     };
