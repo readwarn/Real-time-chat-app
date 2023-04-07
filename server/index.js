@@ -1,5 +1,5 @@
 const express = require("express");
-const socket = require("socket.io");
+const { Server } = require("socket.io");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const mongoose = require("mongoose");
@@ -60,9 +60,16 @@ const server = app.listen(process.env.PORT || 3000, function () {
   console.log("running");
 });
 
-const io = socket(server, {
+// const io = socket(server, {
+//   cors: {
+//     origin: "https://real-time-chat-app-three.vercel.app",
+//     methods: ["GET", "PUT", "POST"],
+//   },
+// });
+
+const io = new Server(server, {
   cors: {
-    origin: "https://real-time-chat-app-three.vercel.app",
+    origin: ["https://real-time-chat-app-three.vercel.app"],
     methods: ["GET", "PUT", "POST"],
   },
 });
