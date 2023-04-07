@@ -461,12 +461,14 @@ export default {
   },
   mounted() {
     this.socket.on("connect", () => {
+      console.log("SOCKET CONNECTED!");
       if (this.channels.length > 0) {
         this.registerChannels(this.channels);
         this.disconnected = false;
       }
     });
     this.socket.on("disconnect", (reason) => {
+      console.log("SOCKET DISCONNECTED COS", reason);
       this.disconnected = true;
     });
     this.parent = document.querySelector("div.body-right-container");
