@@ -39,7 +39,7 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Credentials", true);
   res.header(
     "Access-Control-Allow-Origin",
-    "https://calm-meadow-71961.herokuapp.com"
+    "https://real-time-chat-app-three.vercel.app"
   );
   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
   res.header(
@@ -62,7 +62,7 @@ const server = app.listen(process.env.PORT || 3000, function () {
 
 const io = socket(server, {
   cors: {
-    origin: "https://calm-meadow-71961.herokuapp.com",
+    origin: "https://real-time-chat-app-three.vercel.app",
     methods: ["GET", "PUT", "POST"],
   },
 });
