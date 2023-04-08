@@ -257,7 +257,7 @@ export default {
       joining: false,
       joined: false,
       finding: false,
-      socket: io("https://real-time-chat-app-2jwk.vercel.app"),
+      socket: io("https://real-time-chat-app-2jwk.vercel.app/socket.io"),
       child: 100,
       parent: 30,
     };
