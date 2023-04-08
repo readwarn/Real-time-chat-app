@@ -257,7 +257,7 @@ export default {
       joining: false,
       joined: false,
       finding: false,
-      socket: io("https://real-time-chat-app-2jwk.vercel.app/"),
+      socket: null,
       child: 100,
       parent: 30,
     };
@@ -459,6 +459,11 @@ export default {
       return childHeight - parentHeight + 13;
     },
   },
+
+  created() {
+    this.socket = io("https://real-time-chat-app-2jwk.vercel.app");
+  },
+
   mounted() {
     this.socket.on("connect", () => {
       console.log("SOCKET CONNECTED!");
