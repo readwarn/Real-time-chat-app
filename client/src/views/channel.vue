@@ -460,7 +460,6 @@ export default {
     },
   },
   mounted() {
-    this.socket = io("https://real-time-chat-app-2jwk.vercel.app");
     this.socket.on("connect", () => {
       console.log("SOCKET CONNECTED!");
       if (this.channels.length > 0) {
