@@ -70,7 +70,14 @@ const server = app.listen(process.env.PORT || 3000, function () {
 const io = new Server(server, {
   cors: {
     origin: ["https://real-time-chat-app-three.vercel.app"],
-    methods: ["GET", "PUT", "POST"],
+    allowedHeaders: [
+      "X-Requested-With",
+      "X-HTTP-Method-Override",
+      "Content-Type",
+      "Accept",
+    ],
+    methods: ["GET", "PUT", "POST", "DELETE"],
+    credentials: true,
   },
 });
 
@@ -88,6 +95,7 @@ const io = new Server(server, {
 // io.adapter(createAdapter(pubClient, subClient));
 
 io.on("connection", (socket) => {
+  console.log("SERVER CONNECTION HAPPENED", socket);
   socket.on("registerAll", (channels) => {
     channels.forEach((channel) => {
       socket.join(channel._id);
