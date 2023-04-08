@@ -461,7 +461,7 @@ export default {
   },
 
   created() {
-    this.socket = io("https://real-time-chat-app-2jwk.vercel.app");
+    this.socket = io("https://real-time-chat-app-2jwk.vercel.app/socket.io");
   },
 
   mounted() {
