@@ -70,12 +70,12 @@ const server = app.listen(process.env.PORT || 3000, function () {
 const io = new Server(server, {
   cors: {
     origin: ["https://real-time-chat-app-three.vercel.app"],
-    allowedHeaders: [
-      "X-Requested-With",
-      "X-HTTP-Method-Override",
-      "Content-Type",
-      "Accept",
-    ],
+    // allowedHeaders: [
+    //   "X-Requested-With",
+    //   "X-HTTP-Method-Override",
+    //   "Content-Type",
+    //   "Accept",
+    // ],
     methods: ["GET", "PUT", "POST", "DELETE"],
     credentials: true,
   },
