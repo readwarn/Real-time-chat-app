@@ -257,7 +257,9 @@ export default {
       joining: false,
       joined: false,
       finding: false,
-      socket: io("https://real-time-chat-app-2jwk.vercel.app"),
+      socket: io("https://real-time-chat-app-2jwk.vercel.app", {
+        transports: ["websocket"],
+      }),
       child: 100,
       parent: 30,
     };
@@ -460,6 +462,9 @@ export default {
     },
   },
   mounted() {
+    this.socket = io("https://real-time-chat-app-2jwk.vercel.app", {
+      transports: ["websocket"],
+    });
     this.socket.on("connect", () => {
       console.log("SOCKET CONNECTED!");
       if (this.channels.length > 0) {
