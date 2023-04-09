@@ -82,21 +82,20 @@ const io = new Server(server, {
   },
 });
 
-const redis = require("redis");
-const { createAdapter } = require("@socket.io/redis-adapter");
-const pubClient = redis.createClient(
-  9809,
-  "ec2-54-243-181-172.compute-1.amazonaws.com",
-  {
-    auth_pass:
-      "p724cd67583f041245abe3090c6d995154d884cb21d496d0fa9d6b6e324af9325",
-  }
-);
-const subClient = pubClient.duplicate();
-io.adapter(createAdapter(pubClient, subClient));
+// const redis = require("redis");
+// const { createAdapter } = require("@socket.io/redis-adapter");
+// const pubClient = redis.createClient(
+//   9809,
+//   "ec2-54-243-181-172.compute-1.amazonaws.com",
+//   {
+//     auth_pass:
+//       "p724cd67583f041245abe3090c6d995154d884cb21d496d0fa9d6b6e324af9325",
+//   }
+// );
+// const subClient = pubClient.duplicate();
+// io.adapter(createAdapter(pubClient, subClient));
 
 io.on("connection", (socket) => {
-  console.log("SERVER CONNECTION HAPPENED", socket);
   socket.on("registerAll", (channels) => {
     channels.forEach((channel) => {
       socket.join(channel._id);
