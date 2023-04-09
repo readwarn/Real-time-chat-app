@@ -94,6 +94,7 @@ router.post("/login", function (req, res, next) {
 });
 
 router.get("/status", (req, res) => {
+  console.log("request status is", req);
   res.json(req.isAuthenticated());
 });
 
