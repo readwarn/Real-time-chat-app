@@ -24,13 +24,13 @@ app.use(bodyParser.json());
 app.set("trust proxy", 1);
 app.use(
   require("express-session")({
-    secret: "hello circuit",
+    secret: "hello circuit world",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      sameSite: "lax",
+      sameSite: "none",
       secure: true,
-      maxAge: 86400000,
+      maxAge: 24 * 60 * 60 * 1000,
     },
   })
 );
