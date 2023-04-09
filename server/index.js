@@ -30,6 +30,7 @@ app.use(
     cookie: {
       sameSite: "lax",
       secure: true,
+      maxAge: 86400000,
     },
   })
 );
