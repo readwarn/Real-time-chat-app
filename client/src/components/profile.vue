@@ -29,7 +29,7 @@ export default {
   methods: {
     logout() {
       this.$http
-        .get("https://real-time-chat-app-2jwk.vercel.app/auth/logout")
+        .get("https://real-time-chat-app-c18p.onrender.com/auth/logout")
         .then((response) => {
           console.log(response);
           router.push("/login");

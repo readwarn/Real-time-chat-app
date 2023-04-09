@@ -61,7 +61,7 @@ export default {
   },
   created() {
     this.$http
-      .get("https://real-time-chat-app-2jwk.vercel.app/users/currentUser")
+      .get("https://real-time-chat-app-c18p.onrender.com/users/currentUser")
       .then((res) => {
         this.user = res.data;
       });

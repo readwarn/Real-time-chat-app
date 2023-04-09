@@ -50,18 +50,18 @@
         <p class="option">or continue with these social profile</p>
         <div class="social-icons">
           <a
-            href="https://real-time-chat-app-2jwk.vercel.app/auth/google"
+            href="https://real-time-chat-app-c18p.onrender.com/auth/google"
             target="_self"
             ><i class="fab fa-google"></i
           ></a>
           <a
-            href="https://real-time-chat-app-2jwk.vercel.app/auth/facebook"
+            href="https://real-time-chat-app-c18p.onrender.com/auth/facebook"
             target="_self"
             ><i class="fab fa-facebook-square"></i
           ></a>
           <a href="#" target="_self"><i class="fab fa-twitter"></i></a>
           <a
-            href="https://real-time-chat-app-2jwk.vercel.app/auth/github"
+            href="https://real-time-chat-app-c18p.onrender.com/auth/github"
             target="_self"
             ><i class="fab fa-github"></i
           ></a>
@@ -101,7 +101,7 @@ export default {
         this.disabled = true;
         this.$http
           .post(
-            "https://real-time-chat-app-2jwk.vercel.app/auth/register",
+            "https://real-time-chat-app-c18p.onrender.com/auth/register",
             self.user
           )
           .then((response) => {
