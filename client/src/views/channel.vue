@@ -257,7 +257,7 @@ export default {
       joining: false,
       joined: false,
       finding: false,
-      socket: io("https://real-time-chat-app-2jwk.vercel.app/socket.io"),
+      socket: io("https://real-time-chat-app-c18p.onrender.com"),
       child: 100,
       parent: 30,
     };
@@ -328,7 +328,7 @@ export default {
       this.joined = false;
       this.$http
         .get(
-          "https://real-time-chat-app-2jwk.vercel.app/channels/name/" +
+          "https://real-time-chat-app-c18p.onrender.com/channels/name/" +
             ChannelName
         )
         .then((res) => {
@@ -346,7 +346,7 @@ export default {
       this.joining = true;
       this.$http
         .post(
-          "https://real-time-chat-app-2jwk.vercel.app/channels/" + channel._id
+          "https://real-time-chat-app-c18p.onrender.com/channels/" + channel._id
         )
         .then((res) => {
           this.joining = false;
@@ -371,7 +371,7 @@ export default {
       this.error = "";
       this.$http
         .post(
-          "https://real-time-chat-app-2jwk.vercel.app/channels",
+          "https://real-time-chat-app-c18p.onrender.com/channels",
           channelDetails
         )
         .then((res) => {
@@ -393,7 +393,7 @@ export default {
       this.socket.emit("messageSent", channel);
       this.$http
         .post(
-          "https://real-time-chat-app-2jwk.vercel.app/channels/" +
+          "https://real-time-chat-app-c18p.onrender.com/channels/" +
             channel._id +
             "/messages",
           message
@@ -444,7 +444,7 @@ export default {
       let channelCopy = JSON.parse(JSON.stringify(channel));
       this.$http
         .delete(
-          "https://real-time-chat-app-2jwk.vercel.app/channels/" + channel._id
+          "https://real-time-chat-app-c18p.onrender.com/channels/" + channel._id
         )
         .then((res) => {
           this.channels.splice(index, 1);
@@ -461,7 +461,7 @@ export default {
   },
 
   created() {
-    this.socket = io("https://real-time-chat-app-2jwk.vercel.app/socket.io");
+    this.socket = io("https://real-time-chat-app-c18p.onrender.com/socket.io");
   },
 
   mounted() {
@@ -492,7 +492,7 @@ export default {
     const self = this;
 
     this.$http
-      .get("https://real-time-chat-app-2jwk.vercel.app/users/currentUser")
+      .get("https://real-time-chat-app-c18p.onrender.com/users/currentUser")
       .then((res) => {
         if (res.data.isLoggedIn === false) {
           router.push("/login");
@@ -504,7 +504,7 @@ export default {
 
           this.$http
             .get(
-              "https://real-time-chat-app-2jwk.vercel.app/users/currentUser/channels"
+              "https://real-time-chat-app-c18p.onrender.com/users/currentUser/channels"
             )
             .then((res) => {
               self.channels = res.data;
